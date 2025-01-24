@@ -1,6 +1,5 @@
 import random
 import string
-import requests
 
 class Helpers:
 
@@ -22,8 +21,3 @@ class Helpers:
         }
 
         return payload
-
-    def delete_user(self, token):
-        header = {'Authorization': token}
-        response = requests.delete(f'{USER_URL}', headers=header)
-        return response
