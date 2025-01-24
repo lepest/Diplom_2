@@ -8,25 +8,25 @@ from data import Data
 class TestUser:
 
     @allure.title('Создание курьера')
-    def test_create_user(self):
+    def test_create_user(self, delete_user):
         payload = Helpers().register_new_user()
         response = UserMethods().request_to_create_user(payload)
-        assert response.status_code == 200
-        UserMethods().delete_user()
+        assert response.status_code == 200 and response.json()['success'] == True
+        response = delete_user
 
     @allure.title('Создание уже зарегистрированного пользователя')
-    def test_create_registered_user(self):
+    def test_create_registered_user(self, delete_user):
         payload = Data.registered_user
         response = UserMethods().request_to_create_user(payload)
-        assert response.status_code == 403
-        UserMethods().delete_user()
+        assert response.status_code == 403 and response.json()['success'] == False
+        response = delete_user
 
     @allure.title('Создание пользователя с незаполненным полем')
-    def test_create_user_with_empty_field(self):
+    def test_create_user_with_empty_field(self, delete_user):
         payload = Data.user_empty_field
         response = UserMethods().request_to_create_user(payload)
-        assert response.status_code == 403
-        UserMethods().delete_user()
+        assert response.status_code == 403 and response.json()['success'] == False
+        response = delete_user
 
     @allure.title('Авторизация под существующим логином пользователя')
     def test_authorization_existing_login(self):
@@ -39,7 +39,7 @@ class TestUser:
     def test_authorization_incorrect_data(self, data_payload):
         payload = data_payload
         response = UserMethods().authorization_existing_login(payload)
-        assert response.status_code == 401
+        assert response.status_code == 401 and response.json()['success'] == False
 
     @allure.title('Изменение данных пользователя с авторизацией')
     def test_user_data_update_with_authorization(self):

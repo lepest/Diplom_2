@@ -20,6 +20,11 @@ class UserMethods:
         response = requests.post(f'{AUTHORIZATION_USER}', data=payload)
         return response
 
+    @allure.step('Получить токен уникального пользователяз')
+    def get_token_user(self, payload):
+        response = requests.post(f'{AUTHORIZATION_USER}', data=payload)
+        return response.json()['refreshToken']
+
     @allure.step('Изменение данных пользователя')
     def user_data_update(self, payload, headers_1):
         response = requests.patch(f'{USER_URL}', data=payload, headers=headers_1)

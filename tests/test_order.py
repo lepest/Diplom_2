@@ -11,7 +11,7 @@ class TestOrder:
         payload_ingredient = OrderMethods().get_hash_ingredient(Data.existing_login)
         payload["ingredients"] = payload_ingredient
         response = OrderMethods().create_order(payload)
-        assert response.status_code == 200
+        assert response.status_code == 200 and response.json()['success'] == True
 
     @allure.title('Создание заказа без авторизации')
     def test_create_order_without_authorization(self):
@@ -19,14 +19,14 @@ class TestOrder:
         payload_ingredient = OrderMethods().get_hash_ingredient_without_authorization()
         payload["ingredients"] = payload_ingredient
         response = OrderMethods().create_order(payload)
-        assert response.status_code == 200
+        assert response.status_code == 200 and response.json()['success'] == True
 
     @allure.title('Создание заказа без ингредиентов')
     def test_create_order_without_ingredients(self):
         payload = {"ingredients": []}
         OrderMethods().get_hash_ingredient(Data.existing_login)
         response = OrderMethods().create_order(payload)
-        assert response.status_code == 400
+        assert response.status_code == 400 and response.json()['success'] == False
 
     @allure.title('Создание заказа с неверным хешем ингредиентов')
     def test_create_order_incorrect_authorization(self):
@@ -45,4 +45,4 @@ class TestOrder:
     @allure.title('Получение заказов неавторизованного пользователя')
     def test_get_orders_no_authorization_user(self):
         response = OrderMethods().get_orders()
-        assert response.status_code == 401
+        assert response.status_code == 401 and response.json()['success'] == False
