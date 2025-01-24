@@ -8,25 +8,24 @@ from data import Data
 class TestUser:
 
     @allure.title('Создание курьера')
-    def test_create_user(self, delete_user):
+    def test_create_user(self):
         payload = Helpers().register_new_user()
         response = UserMethods().request_to_create_user(payload)
+        token = UserMethods().get_token_user(payload)
         assert response.status_code == 200 and response.json()['success'] == True
-        response = delete_user
+        UserMethods().delete_user(token)
 
     @allure.title('Создание уже зарегистрированного пользователя')
-    def test_create_registered_user(self, delete_user):
+    def test_create_registered_user(self):
         payload = Data.registered_user
         response = UserMethods().request_to_create_user(payload)
         assert response.status_code == 403 and response.json()['success'] == False
-        response = delete_user
 
     @allure.title('Создание пользователя с незаполненным полем')
-    def test_create_user_with_empty_field(self, delete_user):
+    def test_create_user_with_empty_field(self):
         payload = Data.user_empty_field
         response = UserMethods().request_to_create_user(payload)
         assert response.status_code == 403 and response.json()['success'] == False
-        response = delete_user
 
     @allure.title('Авторизация под существующим логином пользователя')
     def test_authorization_existing_login(self):

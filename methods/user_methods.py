@@ -11,8 +11,9 @@ class UserMethods:
         return response
 
     @allure.step('Удалить пользователя')
-    def delete_user(self):
-        response = requests.delete(f'{USER_URL}')
+    def delete_user(self, token):
+        header = {'Authorization': token}
+        response = requests.delete(f'{USER_URL}', headers=header)
         return response
 
     @allure.step('Авторизация под существующим логином пользователя')
