@@ -1,4 +1,10 @@
 class Data:
+    user_reg = {
+        "email": "masterok_user@yandex.ru",
+        "password": "123456852",
+        "name": "Lusya"
+    }
+
     registered_user = {
         "email": "master_user@yandex.ru",
         "password": "123456852",

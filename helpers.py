@@ -21,3 +21,6 @@ class Helpers:
         }
 
         return payload
+
+    def delete_user(self):
+        del_user = 'https://stellarburgers.nomoreparties.site/api/auth/user?accessToken='

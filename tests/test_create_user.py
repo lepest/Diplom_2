@@ -7,13 +7,17 @@ from data import Data
 
 class TestUser:
 
+    token = ''
+
     @allure.title('Создание курьера')
-    def test_create_user(self):
+    def test_create_user(self, delete_user):
         payload = Helpers().register_new_user()
         response = UserMethods().request_to_create_user(payload)
-        token = UserMethods().get_token_user(payload)
-        assert response.status_code == 200 and response.json()['success'] == True
-        UserMethods().delete_user(token)
+        payload_av = {'email': payload['email'],
+                           'password': payload['password']}
+        self.token = UserMethods().get_token_user(payload_av)
+        assert response.status_code == 200 and response.json()['success']
+
 
     @allure.title('Создание уже зарегистрированного пользователя')
     def test_create_registered_user(self):
@@ -46,7 +50,7 @@ class TestUser:
         headers = {}
         headers['Authorization'] = UserMethods().get_token_user(Data.existing_login)
         response = UserMethods().user_data_update(update_payload, headers)
-        assert response.json()["success"] == True and response.status_code == 200
+        assert response.json()["success"] and response.status_code == 200
 
     @allure.title('Изменение данных пользователя без авторизации')
     def test_user_data_update_without_authorization(self):
